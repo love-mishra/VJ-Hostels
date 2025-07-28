@@ -3,29 +3,29 @@ const bcrypt = require('bcrypt');
 
 
 const studentSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
     rollNumber: {
         type: String,
         required: true,
         unique: true
     },
-    branch: {
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    phoneNumber: {
         type: String,
         required: true
     },
-    year: {
-        type: Number,
-        required: true,
-        enum: [1, 2, 3, 4]
-    },
-    profilePhoto: {
+    parentMobileNumber: {
         type: String,
-        default: null
+        required: true
     },
-    phoneNumber: {
+    password: {
+        type: String,
+        required: true
+    },
+    name: {
         type: String,
         required: true
     },
@@ -34,17 +34,9 @@ const studentSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    password: {
-      type: String,
-      required: true
-    },
-    parentMobileNumber: {
+    role: {
         type: String,
-        required: true
-    },
-    roomNumber: {
-        type: String,
-        default: ""
+        default: 'student'
     },
     is_active: {
         type: Boolean,
@@ -52,12 +44,17 @@ const studentSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+// Hash password before saving
 studentSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
     this.password = await bcrypt.hash(this.password, 10);
     next();
 });
 
+// Method to compare password
+studentSchema.methods.comparePassword = async function(candidatePassword) {
+    return await bcrypt.compare(candidatePassword, this.password);
+};
 
 const StudentModel = mongoose.model('Student', studentSchema);
 

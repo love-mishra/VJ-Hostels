@@ -28,7 +28,7 @@ const Food = () => {
     const fetchTodayMenu = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:4000/food-api/student/menu/today');
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/food-api/student/menu/today`);
             setMenu(response.data);
             setError(null);
         } catch (err) {
@@ -45,7 +45,7 @@ const Food = () => {
 
     const fetchFeedbackHistory = async () => {
         try {
-            const response = await axios.get(`http://localhost:4000/food-api/student/feedback/${user.rollNumber}`);
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/food-api/student/feedback/${user.rollNumber}`);
             setFeedbackHistory(response.data);
         } catch (err) {
             console.error("Failed to fetch feedback history:", err);
@@ -71,7 +71,7 @@ const Food = () => {
                 feedback
             };
             
-            await axios.post('http://localhost:4000/food-api/student/feedback', feedbackData);
+            await axios.post(`${import.meta.env.VITE_SERVER_URL}/food-api/student/feedback`, feedbackData);
             
             setSubmitSuccess(true);
             setFeedback('');

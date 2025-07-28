@@ -15,7 +15,7 @@ const AdminChat = () => {
 
     // Initialize socket connection
     useEffect(() => {
-        const newSocket = io('http://localhost:4000');
+        const newSocket = io(`${import.meta.env.VITE_SERVER_URL}`);
         setSocket(newSocket);
 
         // Clean up on unmount
@@ -28,7 +28,7 @@ const AdminChat = () => {
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/message-api/all', {
+                const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/message-api/all`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -84,7 +84,7 @@ const AdminChat = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost:4000/message-api/upload-image',
+                `${import.meta.env.VITE_SERVER_URL}/message-api/upload-image`,
                 formData,
                 {
                     headers: {

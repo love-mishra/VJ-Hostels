@@ -12,11 +12,13 @@ function Outpass() {
 
     // console.log(user)
 
-    console.log('User name:', user.name);
-    console.log('mobile: ', user.mobileNumber);
-
     const onSubmit = async (data) => {
         try {
+            if (!user?.phoneNumber || !user?.parentMobileNumber) {
+                alert('Phone numbers are required. Please update your profile.');
+                return;
+            }
+
             const now = new Date();
             const month = now.getMonth() + 1;
             const year = now.getFullYear();
@@ -33,7 +35,7 @@ function Outpass() {
 
             console.log('Submitting Payload:', payload);
 
-            const response = await axios.post('http://localhost:4000/student-api/apply-outpass', payload);
+            const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/student-api/apply-outpass`, payload);
 
             console.log('API Response:', response);
             alert(response.data.message || 'Outpass request submitted successfully!');

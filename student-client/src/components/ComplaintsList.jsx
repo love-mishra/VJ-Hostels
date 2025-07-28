@@ -11,7 +11,7 @@ const ComplaintsList = () => {
     useEffect(() => {
         const fetchComplaints = async () => {
             try {
-                const response = await axios.get(`http://localhost:4000/student-api/get-complaints/${user.rollNumber}`);
+                const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/student-api/get-complaints/${user.rollNumber}`);
                 setComplaints(response.data || []);
             } catch (err) {
                 setError('Failed to fetch complaints.');

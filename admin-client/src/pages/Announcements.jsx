@@ -22,7 +22,7 @@ const Announcements = () => {
     const fetchAnnouncements = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:4000/admin-api/all-announcements', {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin-api/all-announcements`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -50,7 +50,7 @@ const Announcements = () => {
 
         try {
             if (editingId) {
-                await axios.put(`http://localhost:4000/admin-api/edit-announcement/${editingId}`,
+                await axios.put(`${import.meta.env.VITE_SERVER_URL}/admin-api/edit-announcement/${editingId}`,
                     { description: formData.description },
                     {
                         headers: {
@@ -59,7 +59,7 @@ const Announcements = () => {
                     }
                 );
             } else {
-                await axios.post('http://localhost:4000/admin-api/post-announcement',
+                await axios.post(`${import.meta.env.VITE_SERVER_URL}/admin-api/post-announcement`,
                     formData,
                     {
                         headers: {

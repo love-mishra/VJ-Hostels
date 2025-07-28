@@ -35,7 +35,7 @@ const EditStudentModal = ({ show, onClose, student, onStudentUpdated }) => {
 
     const fetchAvailableRooms = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/admin-api/rooms', {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin-api/rooms`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -69,7 +69,7 @@ const EditStudentModal = ({ show, onClose, student, onStudentUpdated }) => {
 
         try {
             const response = await axios.put(
-                `http://localhost:4000/admin-api/update-student/${student._id}`,
+                `${import.meta.env.VITE_SERVER_URL}/admin-api/update-student/${student._id}`,
                 formData,
                 {
                     headers: {

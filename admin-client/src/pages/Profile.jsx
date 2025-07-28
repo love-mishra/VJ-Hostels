@@ -44,7 +44,7 @@ const Profile = () => {
         setLoading(true);
         try {
             // Simulating API call
-            // await axios.post('http://localhost:4000/admin-api/change-password',
+            // await axios.post(`${import.meta.env.VITE_SERVER_URL}/admin-api/change-password`,
             //     {
             //         currentPassword: formData.currentPassword,
             //         newPassword: formData.newPassword

@@ -1,10 +1,20 @@
+const path = require('path');
+const fs = require('fs');
+
+// Check if running from correct directory
+if (!fs.existsSync(path.join(process.cwd(), 'server'))) {
+  console.error('Error: Please run this script from the root directory of the project (VJ-Hostels)');
+  console.error('Example: node server/scripts/allocateRooms.js');
+  process.exit(1);
+}
+
 const mongoose = require('mongoose');
-const Student = require('../models/StudentModel');
-const Room = require('../models/Room');
-require('dotenv').config();
+const Student = require(path.join(__dirname, '../models/StudentModel'));
+const Room = require(path.join(__dirname, '../models/Room'));
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.DBURL)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => {
     console.error('Failed to connect to MongoDB', err);
@@ -64,9 +74,12 @@ async function allocateRooms() {
         if (room.occupants.length < room.capacity) {
           console.log(`Allocating student ${student.name} (${student.rollNumber}) to room ${room.roomNumber}`);
 
-          // Update student's room number
-          student.roomNumber = room.roomNumber;
-          await student.save();
+          // Update student's room number while preserving other fields
+          await Student.findByIdAndUpdate(
+            student._id,
+            { roomNumber: room.roomNumber },
+            { new: true, runValidators: false }
+          );
 
           // Add student to room's occupants
           room.occupants.push(student._id);

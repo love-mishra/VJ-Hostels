@@ -19,7 +19,7 @@ const StudentDetailsModal = ({ show, onClose, rollNumber, onStudentUpdated }) =>
     const fetchStudentDetails = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:4000/admin-api/student-details/${rollNumber}`, {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin-api/student-details/${rollNumber}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

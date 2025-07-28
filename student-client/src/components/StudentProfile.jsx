@@ -10,7 +10,12 @@ function StudentProfile() {
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
+  });
+  
+  const [profileData, setProfileData] = useState({
+    phoneNumber: user?.phoneNumber || '',
+    parentMobileNumber: user?.parentMobileNumber || '',
   });
   const [passwordError, setPasswordError] = useState('');
   const [passwordSuccess, setPasswordSuccess] = useState('');
@@ -54,7 +59,7 @@ function StudentProfile() {
     setPasswordLoading(true);
 
     try {
-      const response = await axios.put('http://localhost:4000/student-api/change-password', {
+      const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}/student-api/change-password`, {
         rollNumber: user.rollNumber,
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword
@@ -107,7 +112,7 @@ function StudentProfile() {
       formData.append('rollNumber', user.rollNumber);
 
       const response = await axios.put(
-        'http://localhost:4000/student-api/update-profile-photo',
+        `${import.meta.env.VITE_SERVER_URL}/student-api/update-profile-photo`,
         formData,
         {
           headers: {
@@ -129,6 +134,30 @@ function StudentProfile() {
     } finally {
       setPhotoLoading(false);
     }
+  };
+
+  const handleProfileUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_SERVER_URL}/student-api/update-profile/${user.rollNumber}`,
+        profileData
+      );
+      if (response.data.success) {
+        login({ ...user, ...profileData });
+        alert('Profile updated successfully');
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || 'Failed to update profile');
+    }
+  };
+
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   return (
@@ -172,15 +201,34 @@ function StudentProfile() {
 
       {/* Profile Info Tab */}
       {activeTab === 'profile' && (
-        <div style={styles.infoContainer}>
-          <p><strong>Name:</strong> {user.name}</p>
-          <p><strong>Roll Number:</strong> {user.rollNumber}</p>
-          <p><strong>Branch:</strong> {user.branch}</p>
-          <p><strong>Year:</strong> {user.year}</p>
-          <p><strong>Phone Number:</strong> {user.phoneNumber}</p>
-          <p><strong>Parent Mobile Number:</strong> {user.parentMobileNumber}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Room Number:</strong> {user.roomNumber}</p>
+        <div className="formContainer">
+          <form onSubmit={handleProfileUpdate}>
+            <div className="mb-3">
+              <label className="form-label">Student Phone Number</label>
+              <input
+                type="tel"
+                className="form-control"
+                name="phoneNumber"
+                value={profileData.phoneNumber}
+                onChange={handleProfileChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Parent Phone Number</label>
+              <input
+                type="tel"
+                className="form-control"
+                name="parentMobileNumber"
+                value={profileData.parentMobileNumber}
+                onChange={handleProfileChange}
+                required
+              />
+            </div>
+            <button type="submit" className="btn btn-primary">
+              Update Profile
+            </button>
+          </form>
         </div>
       )}
 

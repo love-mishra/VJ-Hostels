@@ -19,7 +19,7 @@ const Community = () => {
     const fetchCommunityPosts = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:4000/admin-api/get-community-messages', {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin-api/get-community-messages`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

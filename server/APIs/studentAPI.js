@@ -21,9 +21,17 @@ studentApp.get('/', (req, res) => {
 
 studentApp.post('/login', expressAsyncHandler(async (req, res) => {
     try {
-        const { rollNumber, password } = req.body;
+        const { rollNumber, username, password } = req.body;
 
-        const student = await Student.findOne({ rollNumber, is_active: true });
+        // Try finding student by rollNumber or username
+        const student = await Student.findOne({
+            $or: [
+                { rollNumber },
+                { username }
+            ],
+            is_active: true
+        });
+        
         if (!student || !(await bcrypt.compare(password, student.password))) {
             return res.status(401).json({ message: "Invalid credentials or inactive account" });
         }
@@ -40,9 +48,9 @@ studentApp.post('/login', expressAsyncHandler(async (req, res) => {
                 branch: student.branch,
                 year: student.year,
                 profilePhoto: student.profilePhoto,
-                phoneNumber: student.phoneNumber,
+                phoneNumber: student.phoneNumber || '',
+                parentMobileNumber: student.parentMobileNumber || '',
                 email: student.email,
-                parentMobileNumber: student.parentMobileNumber,
                 roomNumber: student.roomNumber,
                 is_active: student.is_active
             }
@@ -162,6 +170,14 @@ studentApp.post('/apply-outpass', expressAsyncHandler(async (req, res) => {
     try {
         const { name, rollNumber, outTime, inTime, studentMobileNumber, parentMobileNumber, reason, type } = req.body;
 
+        // Validate all required fields
+        if (!name || !rollNumber || !outTime || !inTime || !studentMobileNumber || !parentMobileNumber || !reason || !type) {
+            return res.status(400).json({ 
+                message: 'All fields are required',
+                received: { name, rollNumber, outTime, inTime, studentMobileNumber, parentMobileNumber, reason, type }
+            });
+        }
+
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth() + 1;
         const currentYear = currentDate.getFullYear();
@@ -272,6 +288,36 @@ studentApp.put('/update-profile-photo', uploadProfilePhoto, expressAsyncHandler(
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+}));
+
+// Update student profile
+studentApp.put('/update-profile/:rollNumber', expressAsyncHandler(async (req, res) => {
+    try {
+        const { rollNumber } = req.params;
+        const { phoneNumber, parentMobileNumber } = req.body;
+
+        if (!phoneNumber || !parentMobileNumber) {
+            return res.status(400).json({ message: 'Both phone numbers are required' });
+        }
+
+        const updatedStudent = await Student.findOneAndUpdate(
+            { rollNumber },
+            { phoneNumber, parentMobileNumber },
+            { new: true }
+        );
+
+        if (!updatedStudent) {
+            return res.status(404).json({ message: 'Student not found' });
+        }
+
+        res.json({ 
+            success: true, 
+            message: 'Profile updated successfully',
+            student: updatedStudent
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 }));
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useUser } from '../context/UserContext';
+import ErrorBoundary from './ErrorBoundary';
 
 const OutpassList = () => {
     const { user } = useUser();
@@ -11,12 +12,20 @@ const OutpassList = () => {
 
     useEffect(() => {
         const fetchOutpasses = async () => {
-            // console.log("out pass response: ",response.data);
+            if (!user) {
+                setError('User not found. Please log in.');
+                setLoading(false);
+                return;
+            }
             try {
-                const response = await axios.get(`http://localhost:4000/student-api/all-outpasses/${user.rollNumber}`);
-                setOutpasses(response.data.studentOutpasses || []);
+                if (!user?.rollNumber) {
+                    throw new Error('User roll number is required');
+                }
+                const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/student-api/all-outpasses/${user.rollNumber}`);
+                setOutpasses(Array.isArray(response.data.studentOutpasses) ? response.data.studentOutpasses : []);
             } catch (err) {
-                setError('Failed to fetch outpasses');
+                console.error('Error fetching outpasses:', err);
+                setError(err.response?.data?.message || err.message || 'Failed to fetch outpasses');
             } finally {
                 setLoading(false);
             }
@@ -25,13 +34,31 @@ const OutpassList = () => {
         fetchOutpasses();
     }, [user.rollNumber]);
 
-    if (loading) return <p>Loading outpasses...</p>;
-    if (error) return <p style={{ color: 'red' }}>{error}</p>;
-    if (outpasses.length === 0) return <p>No outpass requests found.</p>;
+    if (loading) return (
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+            <p>Loading outpasses...</p>
+        </div>
+    );
+    if (error) return (
+        <div style={{ textAlign: 'center', padding: '2rem', backgroundColor: '#ffebee', borderRadius: '8px' }}>
+            <p style={{ color: '#d32f2f' }}>{error}</p>
+        </div>
+    );
+    if (!user) return (
+        <div style={{ textAlign: 'center', padding: '2rem', backgroundColor: '#fff3e0', borderRadius: '8px' }}>
+            <p style={{ color: '#e65100' }}>Please log in to view your outpasses</p>
+        </div>
+    );
+    if (outpasses.length === 0) return (
+        <div style={{ textAlign: 'center', padding: '2rem', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
+            <p style={{ color: '#666' }}>No outpass requests found.</p>
+        </div>
+    );
 
     return (
-        <div style={{ maxWidth: '900px', margin: '2rem auto' }}>
-            <h2 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>My Outpass Requests</h2>
+        <ErrorBoundary>
+            <div style={{ maxWidth: '900px', margin: '2rem auto' }}>
+                <h2 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>My Outpass Requests</h2>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                     <tr style={{ backgroundColor: '#333', color: '#fff' }}>
@@ -56,7 +83,8 @@ const OutpassList = () => {
                     ))}
                 </tbody>
             </table>
-        </div>
+            </div>
+        </ErrorBoundary>
     );
 };
 

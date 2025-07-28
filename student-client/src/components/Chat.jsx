@@ -22,7 +22,7 @@ const Chat = () => {
 
         try {
             // Create a real socket.io connection
-            const newSocket = io('http://localhost:4000');
+            const newSocket = io(`${import.meta.env.VITE_SERVER_URL}`);
 
             // Set up event handlers
             newSocket.on('connect', () => {
@@ -58,7 +58,7 @@ const Chat = () => {
         const fetchMessages = async () => {
             try {
                 console.log('Fetching messages from server...');
-                const response = await axios.get('http://localhost:4000/message-api/all');
+                const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/message-api/all`);
 
                 if (response.data && Array.isArray(response.data)) {
                     setMessages(response.data);
@@ -122,7 +122,7 @@ const Chat = () => {
             formData.append('messageImage', selectedImage);
 
             const response = await axios.post(
-                'http://localhost:4000/message-api/upload-image',
+                `${import.meta.env.VITE_SERVER_URL}/message-api/upload-image`,
                 formData,
                 {
                     headers: {
@@ -231,7 +231,7 @@ const Chat = () => {
 
                                 // Create a new socket connection
                                 try {
-                                    const newSocket = io('http://localhost:4000');
+                                    const newSocket = io(`${import.meta.env.VITE_SERVER_URL}`);
 
                                     // Set up event handlers
                                     newSocket.on('connect', () => {
@@ -260,7 +260,7 @@ const Chat = () => {
                                     const fetchMessages = async () => {
                                         try {
                                             console.log('Fetching messages after reconnection...');
-                                            const response = await axios.get('http://localhost:4000/message-api/all');
+                                            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/message-api/all`);
 
                                             if (response.data && Array.isArray(response.data)) {
                                                 setMessages(response.data);

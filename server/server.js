@@ -109,7 +109,7 @@ server.listen(port, () => {
     console.log(`Server listening on port ${port}...`);
 
     // Try to connect to MongoDB after server is started
-    mongoose.connect('mongodb://localhost:27017/hostel-management')
+    mongoose.connect(process.env.DBURL)
     .then(() => {
         console.log("MongoDB connection successful!");
     })

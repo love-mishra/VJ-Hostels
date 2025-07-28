@@ -24,7 +24,7 @@ const CommunityPosts = () => {
     const fetchCommunityPosts = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:4000/student-api/get-community-messages');
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/student-api/get-community-messages`);
             setPosts(response.data);
             setError('');
         } catch (err) {
@@ -84,7 +84,7 @@ const CommunityPosts = () => {
 
             // Create the post
             const response = await axios.post(
-                'http://localhost:4000/student-api/post-community-message',
+                `${import.meta.env.VITE_SERVER_URL}/student-api/post-community-message`,
                 formData,
                 {
                     headers: {

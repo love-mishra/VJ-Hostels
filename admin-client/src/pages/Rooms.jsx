@@ -63,7 +63,7 @@ const Rooms = () => {
                 endpoint = `rooms/vacancy?status=${activeTab}`;
             }
 
-            const response = await axios.get(`http://localhost:4000/admin-api/${endpoint}`, {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin-api/${endpoint}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -81,7 +81,7 @@ const Rooms = () => {
     const fetchRoomStudents = async (roomNumber) => {
         try {
             setRoomLoading(true);
-            const response = await axios.get(`http://localhost:4000/admin-api/room/${roomNumber}/students`, {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin-api/room/${roomNumber}/students`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -109,7 +109,7 @@ const Rooms = () => {
         setFormLoading(true);
 
         try {
-            await axios.post('http://localhost:4000/admin-api/room',
+            await axios.post(`${import.meta.env.VITE_SERVER_URL}/admin-api/room`,
                 formData,
                 {
                     headers: {
@@ -149,7 +149,7 @@ const Rooms = () => {
 
         try {
             setAllocatingRooms(true);
-            const response = await axios.post('http://localhost:4000/admin-api/allocate-rooms',
+            const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/admin-api/allocate-rooms`,
                 {},
                 {
                     headers: {
@@ -186,7 +186,7 @@ const Rooms = () => {
 
         try {
             setChangingRoom(true);
-            const response = await axios.put('http://localhost:4000/admin-api/change-student-room',
+            const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}/admin-api/change-student-room`,
                 {
                     studentId: selectedStudent._id,
                     newRoomNumber
@@ -221,7 +221,7 @@ const Rooms = () => {
 
         try {
             setUnassigningRoom(true);
-            const response = await axios.put('http://localhost:4000/admin-api/unassign-student-room',
+            const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}/admin-api/unassign-student-room`,
                 {
                     studentId: student._id
                 },

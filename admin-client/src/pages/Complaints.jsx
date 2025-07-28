@@ -18,7 +18,7 @@ const Complaints = () => {
         try {
             setLoading(true);
             const endpoint = activeTab === 'active' ? 'get-active-complaints' : 'get-complaints';
-            const response = await axios.get(`http://localhost:4000/admin-api/${endpoint}`, {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin-api/${endpoint}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -45,7 +45,7 @@ const Complaints = () => {
 
     const handleMarkAsSolved = async (id) => {
         try {
-            await axios.put(`http://localhost:4000/admin-api/mark-complaint-solved/${id}`, {}, {
+            await axios.put(`${import.meta.env.VITE_SERVER_URL}/admin-api/mark-complaint-solved/${id}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

@@ -11,7 +11,7 @@ const TodayAnnouncements = () => {
         const fetchTodayAnnouncements = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get('http://localhost:4000/student-api/announcements');
+                const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/student-api/announcements`);
                 setTodayAnnouncements(response.data);
                 setLoading(false);
             } catch (error) {

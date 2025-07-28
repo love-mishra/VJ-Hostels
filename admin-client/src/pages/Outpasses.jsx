@@ -16,7 +16,7 @@ const Outpasses = () => {
     const fetchOutpasses = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:4000/admin-api/pending-outpasses', {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin-api/pending-outpasses`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -33,7 +33,7 @@ const Outpasses = () => {
 
     const handleUpdateStatus = async (id, status) => {
         try {
-            await axios.put(`http://localhost:4000/admin-api/update-outpass-status/${id}`,
+            await axios.put(`${import.meta.env.VITE_SERVER_URL}/admin-api/update-outpass-status/${id}`,
                 { status },
                 {
                     headers: {

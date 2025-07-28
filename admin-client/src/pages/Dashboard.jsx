@@ -13,7 +13,7 @@ const Dashboard = () => {
         const fetchDashboardStats = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get('http://localhost:4000/admin-api/dashboard-stats', {
+                const response = await axios.get('process.env.SERVER_URL/admin-api/dashboard-stats', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

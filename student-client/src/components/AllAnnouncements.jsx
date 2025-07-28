@@ -1,6 +1,7 @@
 // AllAnnouncements.jsx
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import ErrorBoundary from './ErrorBoundary';
 
 const AllAnnouncements = () => {
     const [allAnnouncements, setAllAnnouncements] = useState([]);
@@ -11,8 +12,8 @@ const AllAnnouncements = () => {
         const fetchAllAnnouncements = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get('http://localhost:4000/student-api/all-announcements');
-                setAllAnnouncements(response.data);
+                const response = await axios.get('process.env.SERVER_URL/student-api/all-announcements');
+                setAllAnnouncements(Array.isArray(response.data) ? response.data : []);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching all announcements:', error);
@@ -27,9 +28,9 @@ const AllAnnouncements = () => {
     if (loading) return <p style={{ textAlign: 'center' }}>Loading...</p>;
     if (error) return <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>;
 
-    return (
+    const announcementsContent = (
         <div>
-            {allAnnouncements.length > 0 ? (
+            {Array.isArray(allAnnouncements) && allAnnouncements.length > 0 ? (
                 allAnnouncements.map((announcement) => (
                     <div key={announcement._id} className="card mb-3" style={{ boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
                         <div className="card-body">
@@ -45,6 +46,12 @@ const AllAnnouncements = () => {
                 <p style={{ color: '#6c757d', textAlign: 'center' }}>No announcements available.</p>
             )}
         </div>
+    );
+
+    return (
+        <ErrorBoundary>
+            {announcementsContent}
+        </ErrorBoundary>
     );
 };
 

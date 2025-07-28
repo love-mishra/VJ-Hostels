@@ -64,7 +64,7 @@ const Food = () => {
     const fetchMenus = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:4000/food-api/admin/menus', {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/food-api/admin/menus`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -82,7 +82,7 @@ const Food = () => {
     const fetchFeedback = async () => {
         try {
             setFeedbackLoading(true);
-            const response = await axios.get('http://localhost:4000/food-api/admin/feedback', {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/food-api/admin/feedback`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -97,7 +97,7 @@ const Food = () => {
 
     const fetchFeedbackStats = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/food-api/admin/feedback/stats', {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/food-api/admin/feedback/stats`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -123,7 +123,7 @@ const Food = () => {
         setMenuFormLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:4000/food-api/admin/menu',
+            const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/food-api/admin/menu`,
                 menuFormData,
                 {
                     headers: {

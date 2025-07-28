@@ -16,7 +16,7 @@ const Login = () => {
         try {
             setLoading(true);
             setError('');
-            const response = await axios.post('http://localhost:4000/admin-api/login', data);
+            const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/admin-api/login`, data);
             login(response.data.admin, response.data.token);
             navigate('/dashboard');
         } catch (err) {

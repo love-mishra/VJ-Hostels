@@ -12,7 +12,7 @@ const StudentLogin = () => {
 
     const onSubmit = async (data) => {
         try {
-            const response = await axios.post('http://localhost:4000/student-api/login', data);
+            const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/student-api/login`, data);
             login(response.data.student);
             localStorage.setItem('token', response.data.token);
             alert('Login Successful!');

@@ -51,7 +51,7 @@ const Students = () => {
         try {
             setLoading(true);
             const endpoint = activeTab === 'active' ? 'get-active-students' : 'get-inactive-students';
-            const response = await axios.get(`http://localhost:4000/admin-api/${endpoint}`, {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin-api/${endpoint}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -72,7 +72,7 @@ const Students = () => {
         }
 
         try {
-            const response = await axios.put('http://localhost:4000/admin-api/student-delete',
+            const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}/admin-api/student-delete`,
                 { rollNumber },
                 {
                     headers: {
@@ -92,7 +92,7 @@ const Students = () => {
 
     const fetchAvailableRooms = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/admin-api/rooms', {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin-api/rooms`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -121,7 +121,7 @@ const Students = () => {
         setFormLoading(true);
 
         try {
-            await axios.post('http://localhost:4000/admin-api/student-register',
+            await axios.post('process.env.SERVER_URL/admin-api/student-register',
                 formData,
                 {
                     headers: {

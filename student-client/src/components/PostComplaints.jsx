@@ -45,7 +45,7 @@ const PostComplaint = () => {
             }
 
             const response = await axios.post(
-                'http://localhost:4000/student-api/post-complaint',
+                `${import.meta.env.VITE_SERVER_URL}/student-api/post-complaint`,
                 formData,
                 {
                     headers: {
