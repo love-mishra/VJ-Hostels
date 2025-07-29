@@ -57,32 +57,76 @@ const OutpassList = () => {
 
     return (
         <ErrorBoundary>
-            <div style={{ maxWidth: '900px', margin: '2rem auto' }}>
+            <div style={{ maxWidth: '900px', margin: '2rem auto', padding: '0 1rem' }}>
                 <h2 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>My Outpass Requests</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                    <tr style={{ backgroundColor: '#333', color: '#fff' }}>
-                        <th style={styles.th}>Out Time</th>
-                        <th style={styles.th}>In Time</th>
-                        <th style={styles.th}>Reason</th>
-                        <th style={styles.th}>Type</th>
-                        <th style={styles.th}>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {outpasses.map((outpass) => (
-                        <tr key={outpass._id} style={styles.tr}>
-                            <td style={styles.td}>{new Date(outpass.outTime).toLocaleString()}</td>
-                            <td style={styles.td}>{new Date(outpass.inTime).toLocaleString()}</td>
-                            <td style={styles.td}>{outpass.reason}</td>
-                            <td style={styles.td}>{outpass.type}</td>
-                            <td style={{ ...styles.td, color: getStatusColor(outpass.status) }}>
-                                {outpass.status}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+
+                {/* Desktop Table View */}
+                <div className="table-container">
+                    <div className="table-responsive">
+                        <table className="data-table">
+                            <thead>
+                                <tr style={{ backgroundColor: '#333', color: '#fff' }}>
+                                    <th style={styles.th}>Out Time</th>
+                                    <th style={styles.th}>In Time</th>
+                                    <th style={styles.th}>Reason</th>
+                                    <th style={styles.th}>Type</th>
+                                    <th style={styles.th}>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {outpasses.map((outpass) => (
+                                    <tr key={outpass._id} style={styles.tr}>
+                                        <td style={styles.td}>{new Date(outpass.outTime).toLocaleString()}</td>
+                                        <td style={styles.td}>{new Date(outpass.inTime).toLocaleString()}</td>
+                                        <td style={styles.td}>{outpass.reason}</td>
+                                        <td style={styles.td}>{outpass.type}</td>
+                                        <td style={{ ...styles.td, color: getStatusColor(outpass.status) }}>
+                                            <span className={`status-badge status-${outpass.status.toLowerCase()}`}>
+                                                {outpass.status}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Mobile Card View */}
+                    <div className="mobile-card-list">
+                        {outpasses.map((outpass) => (
+                            <div key={outpass._id} className="mobile-card">
+                                <div className="mobile-card-header">
+                                    <h3 className="mobile-card-title">Outpass Request</h3>
+                                    <span className={`status-badge status-${outpass.status.toLowerCase()}`}>
+                                        {outpass.status}
+                                    </span>
+                                </div>
+                                <div className="mobile-card-content">
+                                    <div className="mobile-card-row">
+                                        <span className="mobile-card-label">Out Time:</span>
+                                        <span className="mobile-card-value">
+                                            {new Date(outpass.outTime).toLocaleString()}
+                                        </span>
+                                    </div>
+                                    <div className="mobile-card-row">
+                                        <span className="mobile-card-label">In Time:</span>
+                                        <span className="mobile-card-value">
+                                            {new Date(outpass.inTime).toLocaleString()}
+                                        </span>
+                                    </div>
+                                    <div className="mobile-card-row">
+                                        <span className="mobile-card-label">Reason:</span>
+                                        <span className="mobile-card-value">{outpass.reason}</span>
+                                    </div>
+                                    <div className="mobile-card-row">
+                                        <span className="mobile-card-label">Type:</span>
+                                        <span className="mobile-card-value">{outpass.type}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </ErrorBoundary>
     );

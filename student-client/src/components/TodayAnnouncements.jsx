@@ -28,21 +28,21 @@ const TodayAnnouncements = () => {
     if (error) return <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>;
 
     return (
-        <div>
+        <div className="announcements-list">
             {todayAnnouncements.length > 0 ? (
                 todayAnnouncements.map((announcement) => (
-                    <div key={announcement._id} className="card mb-3" style={{ boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-                        <div className="card-body">
-                            <h5 className="card-title">{announcement.title}</h5>
-                            <p className="card-text">{announcement.description}</p>
-                            <small style={{ color: '#6c757d' }}>
+                    <div key={announcement._id} className="announcement-card">
+                        <div className="announcement-card-body">
+                            <h5 className="announcement-card-title">{announcement.title}</h5>
+                            <p className="announcement-card-text">{announcement.description}</p>
+                            <small className="announcement-card-date">
                                 Posted at: {new Date(announcement.createdAt).toLocaleString()}
                             </small>
                         </div>
                     </div>
                 ))
             ) : (
-                <p style={{ color: '#6c757d', textAlign: 'center' }}>No announcements for today.</p>
+                <p className="no-announcements">No announcements for today.</p>
             )}
         </div>
     );

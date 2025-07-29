@@ -49,53 +49,53 @@ function Outpass() {
     };
 
     return (
-        <div style={{ maxWidth: '600px', margin: '2rem auto', boxShadow: '0 4px 8px rgba(0,0,0,0.1)', padding: '2rem', borderRadius: '8px' }}>
-            <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>Apply for Outpass</h2>
+        <div className="form-container responsive-form">
+            <h2 className="form-title">Apply for Outpass</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="mb-3">
+                <div className="form-group">
                     <label className="form-label">Out Time</label>
                     <input
                         type="datetime-local"
-                        className="form-control"
+                        className="form-input"
                         {...register('outTime', { required: 'Out time is required' })}
                     />
-                    {errors.outTime && <small style={{ color: 'red' }}>{errors.outTime.message}</small>}
+                    {errors.outTime && <span className="error-message">{errors.outTime.message}</span>}
                 </div>
 
-                <div className="mb-3">
+                <div className="form-group">
                     <label className="form-label">In Time</label>
                     <input
                         type="datetime-local"
-                        className="form-control"
+                        className="form-input"
                         {...register('inTime', { required: 'In time is required' })}
                     />
-                    {errors.inTime && <small style={{ color: 'red' }}>{errors.inTime.message}</small>}
+                    {errors.inTime && <span className="error-message">{errors.inTime.message}</span>}
                 </div>
 
-                <div className="mb-3">
+                <div className="form-group">
                     <label className="form-label">Reason for Outpass</label>
                     <textarea
-                        className="form-control"
-                        placeholder="Enter reason"
+                        className="form-textarea"
+                        placeholder="Enter reason for outpass request"
                         {...register('reason', { required: 'Reason is required', maxLength: 200 })}
                     />
-                    {errors.reason && <small style={{ color: 'red' }}>{errors.reason.message}</small>}
+                    {errors.reason && <span className="error-message">{errors.reason.message}</span>}
                 </div>
 
-                <div className="mb-3">
+                <div className="form-group">
                     <label className="form-label">Outpass Type</label>
                     <select
-                        className="form-control"
+                        className="form-select"
                         {...register('type', { required: 'Type of outpass is required' })}
                     >
                         <option value="">Select Type</option>
                         <option value="late pass">Late Pass</option>
                         <option value="home pass">Home Pass</option>
                     </select>
-                    {errors.type && <small style={{ color: 'red' }}>{errors.type.message}</small>}
+                    {errors.type && <span className="error-message">{errors.type.message}</span>}
                 </div>
 
-                <button type="submit" className="btn btn-primary w-100">Submit Outpass</button>
+                <button type="submit" className="form-button">Submit Outpass Request</button>
             </form>
         </div>
     );
