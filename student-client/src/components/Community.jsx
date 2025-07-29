@@ -6,53 +6,33 @@ import CommunityPosts from './CommunityPosts';
 function Community() {
   const [activeTab, setActiveTab] = useState('chat');
 
-  const tabHeaderStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    borderBottom: '1px solid #dee2e6',
-    marginBottom: '2rem'
-  };
-
-  const tabStyle = {
-    padding: '0.75rem 1.5rem',
-    cursor: 'pointer',
-    fontWeight: '500',
-    display: 'flex',
-    alignItems: 'center',
-    margin: '0 1rem',
-    borderBottom: '3px solid transparent'
-  };
-
-  const activeTabStyle = {
-    ...tabStyle,
-    borderBottom: '3px solid #0d6efd',
-    color: '#0d6efd'
-  };
-
   return (
-    <div style={{ padding: '2rem' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>
-        <Megaphone size={32} style={{ marginRight: '10px' }} /> Community
-      </h2>
+    <div className="community-page">
+      <div className="responsive-container">
 
-      {/* Tab Headers */}
-      <div style={tabHeaderStyle}>
-        <div
-          style={activeTab === 'chat' ? activeTabStyle : tabStyle}
-          onClick={() => setActiveTab('chat')}
-        >
-          <MessageSquare size={24} style={{ marginRight: '8px' }} /> Chat
+        {/* Tab Headers */}
+        <div className="community-tabs">
+          <button
+            className={`tab-button ${activeTab === 'chat' ? 'tab-active' : ''}`}
+            onClick={() => setActiveTab('chat')}
+          >
+            <MessageSquare size={20} className="tab-icon" />
+            <span className="tab-text">Chat</span>
+          </button>
+          <button
+            className={`tab-button ${activeTab === 'posts' ? 'tab-active' : ''}`}
+            onClick={() => setActiveTab('posts')}
+          >
+            <Users size={20} className="tab-icon" />
+            <span className="tab-text">Community Posts</span>
+          </button>
         </div>
-        <div
-          style={activeTab === 'posts' ? activeTabStyle : tabStyle}
-          onClick={() => setActiveTab('posts')}
-        >
-          <Users size={24} style={{ marginRight: '8px' }} /> Community Posts
+
+        {/* Tab Content */}
+        <div className="community-content">
+          {activeTab === 'chat' ? <Chat /> : <CommunityPosts />}
         </div>
       </div>
-
-      {/* Content based on active tab */}
-      {activeTab === 'chat' ? <Chat /> : <CommunityPosts />}
     </div>
   );
 }

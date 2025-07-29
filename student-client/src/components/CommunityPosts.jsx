@@ -137,179 +137,196 @@ const CommunityPosts = () => {
     };
 
     return (
-        <div className="container-fluid p-0">
+        <div className="community-posts-container">
             {/* Create Post Form */}
-            <div className="card mb-4 ">
-                <div className="card-header bg-light">
-                    <h5 className="mb-0">Create a New Post</h5>
-                </div>
-                <div className="card-body">
-                    <form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <textarea
-                                className="form-control"
-                                placeholder="What's on your mind?"
-                                value={content}
-                                onChange={(e) => setContent(e.target.value)}
-                                rows="3"
-                                disabled={submitting}
-                            ></textarea>
-                        </div>
-
-                        {imagePreview && (
-                            <div className="mb-3 position-relative">
-                                <img
-                                    src={imagePreview}
-                                    alt="Preview"
-                                    className="img-thumbnail"
-                                    style={{ maxHeight: '200px' }}
-                                />
-                                <button
-                                    type="button"
-                                    className="btn btn-sm btn-danger position-absolute top-0 end-0"
-                                    onClick={cancelImage}
-                                >
-                                    &times;
-                                </button>
-                            </div>
-                        )}
-
-                        <div className="d-flex justify-content-between align-items-center">
-                            <div>
-                                <select
-                                    className="form-select form-select-sm"
-                                    value={category}
-                                    onChange={(e) => setCategory(e.target.value)}
+            <div className="community-posts-form">
+                <div className="card mb-3">
+                    <div className="card-header bg-light">
+                        <h6 className="mb-0">Create a New Post</h6>
+                    </div>
+                    <div className="card-body p-3">
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-3">
+                                <textarea
+                                    className="form-control"
+                                    placeholder="What's on your mind?"
+                                    value={content}
+                                    onChange={(e) => setContent(e.target.value)}
+                                    rows="3"
                                     disabled={submitting}
+                                    style={{ fontSize: '1rem' }}
+                                ></textarea>
+                            </div>
+
+                            {imagePreview && (
+                                <div className="mb-3 position-relative">
+                                    <img
+                                        src={imagePreview}
+                                        alt="Preview"
+                                        className="img-thumbnail"
+                                        style={{ maxHeight: '150px' }}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm btn-danger position-absolute top-0 end-0"
+                                        onClick={cancelImage}
+                                        style={{ transform: 'translate(50%, -50%)' }}
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
+                            )}
+
+                            <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+                                <div>
+                                    <select
+                                        className="form-select"
+                                        value={category}
+                                        onChange={(e) => setCategory(e.target.value)}
+                                        disabled={submitting}
+                                        style={{ fontSize: '1rem' }}
+                                    >
+                                        <option value="general">General</option>
+                                        <option value="missing item">Missing Item</option>
+                                        <option value="interchanged clothes">Interchanged Clothes</option>
+                                    </select>
+                                </div>
+                                <div className="d-flex gap-2">
+                                    <label className="btn btn-outline-secondary" htmlFor="image-upload">
+                                        <Image size={18} />
+                                        <span className="ms-2">Add Image</span>
+                                    </label>
+                                    <input
+                                        id="image-upload"
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        style={{ display: 'none' }}
+                                        disabled={submitting}
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary"
+                                        disabled={submitting || (!content.trim() && !selectedImage)}
+                                    >
+                                        {submitting ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                                Posting...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Send size={18} className="me-2" />
+                                                Post
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {/* Search and Filter */}
+            <div className="community-posts-list">
+                <div className="card mb-3">
+                    <div className="card-header bg-light p-3">
+                        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+                            <h5 className="mb-0">Community Posts</h5>
+                            <div className="d-flex gap-2 w-100 w-md-auto">
+                                <select
+                                    className="form-select"
+                                    value={filter}
+                                    onChange={(e) => setFilter(e.target.value)}
+                                    style={{ fontSize: '1rem' }}
                                 >
+                                    <option value="all">All Categories</option>
                                     <option value="general">General</option>
                                     <option value="missing item">Missing Item</option>
                                     <option value="interchanged clothes">Interchanged Clothes</option>
                                 </select>
                             </div>
-                            <div>
-                                <label className="btn btn-outline-secondary me-2" htmlFor="image-upload">
-                                    <Image size={18} />
-                                    <span className="ms-1">Add Image</span>
-                                </label>
+                        </div>
+                    </div>
+                    <div className="card-body p-3">
+                        <div className="mb-3">
+                            <div className="input-group">
+                                <span className="input-group-text">
+                                    <Search size={18} />
+                                </span>
                                 <input
-                                    id="image-upload"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImageChange}
-                                    style={{ display: 'none' }}
-                                    disabled={submitting}
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Search by content or student name..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    style={{ fontSize: '1rem' }}
                                 />
-                                <button
-                                    type="submit"
-                                    className="btn btn-primary"
-                                    disabled={submitting || (!content.trim() && !selectedImage)}
-                                >
-                                    {submitting ? (
-                                        <>
-                                            <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                            Posting...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Send size={18} className="me-1" />
-                                            Post
-                                        </>
-                                    )}
-                                </button>
                             </div>
                         </div>
-                    </form>
-                </div>
-            </div>
 
-            {/* Search and Filter */}
-            <div className="card mb-4">
-                <div className="card-header bg-light">
-                    <div className="d-flex justify-content-between align-items-center">
-                        <h5 className="mb-0">Community Posts</h5>
-                        <div className="d-flex gap-2">
-                            <select
-                                className="form-select form-select-sm"
-                                value={filter}
-                                onChange={(e) => setFilter(e.target.value)}
-                            >
-                                <option value="all">All Categories</option>
-                                <option value="general">General</option>
-                                <option value="missing item">Missing Item</option>
-                                <option value="interchanged clothes">Interchanged Clothes</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div className="card-body">
-                    <div className="mb-3">
-                        <div className="input-group">
-                            <span className="input-group-text">
-                                <Search size={18} />
-                            </span>
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Search by content or student name..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Posts List */}
-                    {loading ? (
-                        <div className="text-center my-4">
-                            <div className="spinner-border text-primary" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                    ) : error ? (
-                        <div className="alert alert-danger" role="alert">
-                            {error}
-                        </div>
-                    ) : filteredPosts.length === 0 ? (
-                        <div className="alert alert-info" role="alert">
-                            No community posts found.
-                        </div>
-                    ) : (
-                        <div className="list-group">
-                            {filteredPosts.map(post => (
-                                <div key={post._id} className="list-group-item">
-                                    <div className="d-flex justify-content-between align-items-center mb-2">
-                                        <div>
-                                            <strong>{post.postedBy.name}</strong>
-                                            <span className="text-muted ms-2">({post.postedBy.rollNumber})</span>
-                                        </div>
-                                        <div className="d-flex align-items-center">
-                                            <span className={`badge ${getCategoryBadgeClass(post.category)} me-2`}>
-                                                {post.category}
-                                            </span>
-                                            <small className="text-muted">
-                                                {new Date(post.createdAt).toLocaleString()}
-                                            </small>
-                                        </div>
+                        {/* Posts List */}
+                        <div style={{ maxHeight: 'calc(100vh - 350px)', overflowY: 'auto' }}>
+                            {loading ? (
+                                <div className="text-center my-4">
+                                    <div className="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span className="visually-hidden">Loading...</span>
                                     </div>
-                                    <p className="mb-3">{post.content}</p>
-
-                                    {post.images && post.images.length > 0 && (
-                                        <div className="d-flex flex-wrap gap-2 mb-2">
-                                            {post.images.map((image, index) => (
-                                                <img
-                                                    key={index}
-                                                    src={image}
-                                                    alt={`Post image ${index + 1}`}
-                                                    className="img-thumbnail"
-                                                    style={{ width: '150px', height: '150px', objectFit: 'cover' }}
-                                                />
-                                            ))}
-                                        </div>
-                                    )}
                                 </div>
-                            ))}
+                            ) : error ? (
+                                <div className="alert alert-danger alert-sm" role="alert">
+                                    {error}
+                                </div>
+                            ) : filteredPosts.length === 0 ? (
+                                <div className="alert alert-info alert-sm" role="alert">
+                                    No community posts found.
+                                </div>
+                            ) : (
+                                <div className="list-group list-group-flush">
+                                    {filteredPosts.map(post => (
+                                        <div key={post._id} className="community-post-item">
+                                            <div className="community-post-header">
+                                                <div>
+                                                    <div className="community-post-author">{post.postedBy.name}</div>
+                                                    <span className="text-muted" style={{ fontSize: '0.75rem' }}>({post.postedBy.rollNumber})</span>
+                                                </div>
+                                                <div className="community-post-meta">
+                                                    <span className={`badge ${getCategoryBadgeClass(post.category)}`} style={{ fontSize: '0.7rem' }}>
+                                                        {post.category}
+                                                    </span>
+                                                    <small className="text-muted">
+                                                        {new Date(post.createdAt).toLocaleString()}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <div className="community-post-content">{post.content}</div>
+
+                                            {post.images && post.images.length > 0 && (
+                                                <div className="d-flex flex-wrap gap-2 mb-2">
+                                                    {post.images.map((image, index) => (
+                                                        <img
+                                                            key={index}
+                                                            src={image}
+                                                            alt={`Post image ${index + 1}`}
+                                                            className="img-thumbnail"
+                                                            style={{
+                                                                width: '120px',
+                                                                height: '120px',
+                                                                objectFit: 'cover',
+                                                                cursor: 'pointer'
+                                                            }}
+                                                            onClick={() => window.open(image, '_blank')}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
             </div>
         </div>

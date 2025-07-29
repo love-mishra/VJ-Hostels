@@ -1,35 +1,107 @@
-import React from 'react'
-import { Outlet,useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { Menu, X } from 'lucide-react'
 import Navbar from '../components/Navbar';
+import backgroundImage from '../assets/1.jpg';
 
 function RootLayout() {
     const navigate = useNavigate();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
     const handleLogout = () => {
         localStorage.clear();
         navigate('/');
     };
 
+    // Check if device is mobile
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+            if (window.innerWidth > 768) {
+                setSidebarOpen(false);
+            }
+        };
 
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
-  return (
-    <div>
-        <div className="bg-dark d-flex align-items-center justify-content-end px-5" style={{minHeight:"10vh",minWidth:"100vw", position:"fixed",zIndex:"5"}}>
-            <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
-        </div>
-        <div className="bg-dark" style={{minHeight:"10vh",minWidth:"100vw"}}></div>
-        <div className="d-flex" >
-            <div className="bg-warning" style={{height:"90vh", width:"15vw", position:"fixed"}}>
-                <Navbar />
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
+
+    const closeSidebar = () => {
+        setSidebarOpen(false);
+    };
+
+    return (
+        <div
+            className="root-layout"
+            style={{
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundAttachment: 'fixed',
+                backgroundRepeat: 'no-repeat'
+            }}
+        >
+            {/* Header */}
+            <header className="header-bar">
+                <div className="header-content">
+                    <div className="header-left">
+                        {isMobile && (
+                            <button
+                                className="mobile-menu-btn"
+                                onClick={toggleSidebar}
+                                aria-label="Toggle menu"
+                            >
+                                {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+                            </button>
+                        )}
+                        <div className="logo-container">
+                            <img src="/logo.png" alt="VJ Hostels" className="header-logo" />
+                            <h1 className="header-title">VJ Hostels</h1>
+                        </div>
+                    </div>
+
+                    {/* Desktop Navigation */}
+                    {!isMobile && (
+                        <nav className="desktop-nav">
+                            <Navbar onNavigate={closeSidebar} isDesktop={true} />
+                        </nav>
+                    )}
+
+                    <button className="btn btn-danger logout-btn" onClick={handleLogout}>
+                        Logout
+                    </button>
+                </div>
+            </header>
+
+            {/* Mobile Overlay */}
+            {isMobile && sidebarOpen && (
+                <div className="mobile-overlay" onClick={closeSidebar}></div>
+            )}
+
+            {/* Main Content Area */}
+            <div className="main-container">
+                {/* Mobile Sidebar */}
+                {isMobile && (
+                    <aside className={`sidebar sidebar-mobile ${sidebarOpen ? 'sidebar-open' : ''}`}>
+                        <Navbar onNavigate={closeSidebar} isDesktop={false} />
+                    </aside>
+                )}
+
+                {/* Content */}
+                <main className="content-area">
+                    <div className="content-wrapper">
+                        <Outlet />
+                    </div>
+                </main>
             </div>
-            <div className="bg-danger" style={{height:"90vh", minWidth:"15vw",}} ></div>
-            <div className="" style={{minHeight:"90vh", minWidth:"85vw"}}>
-                <Outlet />
-            </div>
         </div>
-        {/* <div className="bg-dark text-white" style={{minHeight:"30vh"}}>Footer</div> */}
-    </div>
-  )
+    )
 }
 
 export default RootLayout
